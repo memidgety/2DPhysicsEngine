@@ -42,39 +42,20 @@ public:
 		pos.at(1) = y;
 	};
 
-	void draw(GLfloat x, GLfloat y, GLfloat z, GLfloat radius) {
-		int numberOfVertices = 361;
-
-		GLfloat twicePi = 2.0f * M_PI;
-
-		GLfloat circleVerticesX[361];
-		GLfloat circleVerticesY[361];
-		GLfloat circleVerticesZ[361];
-
-		circleVerticesX[0] = x;
-		circleVerticesY[0] = y;
-		circleVerticesZ[0] = z;
-
-		for (int i = 1; i < numberOfVertices; i++)
+	void DrawCircle(float cx, float cy, float r, int num_segments)
+	{
+		glBegin(GL_LINE_LOOP);
+		for (int ii = 0; ii < num_segments; ii++)
 		{
-			circleVerticesX[i] = x + (radius * cos(i *  twicePi / 360));
-			circleVerticesY[i] = y + (radius * sin(i * twicePi / 360));
-			circleVerticesZ[i] = z;
+			float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+
+			float x = r * cosf(theta);//calculate the x component
+			float y = r * sinf(theta);//calculate the y component
+
+			glVertex2f(x + cx, y + cy);//output vertex
+
 		}
-
-		GLfloat allCircleVertices[(361)* 3];
-
-		for (int i = 0; i < numberOfVertices; i++)
-		{
-			allCircleVertices[i * 3] = circleVerticesX[i];
-			allCircleVertices[(i * 3) + 1] = circleVerticesY[i];
-			allCircleVertices[(i * 3) + 2] = circleVerticesZ[i];
-		}
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, allCircleVertices);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, numberOfVertices);
-		glDisableClientState(GL_VERTEX_ARRAY);
+		glEnd();
 	}
 
 private:
