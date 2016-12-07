@@ -12,6 +12,8 @@ public:
 
 	virtual ~Display();
 
+	int width, hieght;
+
 private:
 	Display(const Display& other) {}
 	Display& operator=(const Display& other) {}

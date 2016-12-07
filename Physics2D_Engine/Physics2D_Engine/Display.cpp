@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Display::Display(int width, int hieght, const std::string& title) {
+Display::Display(int width, int hieght, const std::string& title) : width(width), hieght(hieght) {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
