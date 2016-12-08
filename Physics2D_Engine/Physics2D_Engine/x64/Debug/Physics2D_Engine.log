@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 12/7/2016 1:47:05 AM.
      1>Project "C:\Users\meMidgety\Desktop\gitFolder\2DPhysicsEngine\Physics2D_Engine\Physics2D_Engine\Physics2D_Engine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -20,3 +21,7 @@
 Build succeeded.
 
 Time Elapsed 00:00:05.38
+=======
+﻿  Source.cpp
+  Physics2D_Engine.vcxproj -> C:\Users\mchlk\Desktop\GitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe
+>>>>>>> ec831284ab9e649f56cb23f5650125b299c009d8

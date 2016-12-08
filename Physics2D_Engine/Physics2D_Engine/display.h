@@ -9,6 +9,7 @@ public:
 	void fill(float r, float g, float b, float a);
 	void Update();
 	bool getIsClosed() { return isClosed; };
+	void setIsClosed(bool closed) { isClosed = closed; }
 
 	virtual ~Display();
 
