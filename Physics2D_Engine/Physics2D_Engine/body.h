@@ -12,13 +12,26 @@ public:
 		x = 0;
 		y = 0;
 	};
+
 	Position(float x, float y) : x(x), y(y) {};
+
 	~Position() {};
+
+	Position& operator= (const Position& p) {
+		this->x = p.x;
+		this->y = p.y;
+		return *this;
+	}
+
 	float x;
 	float y;
 private:
 
 };
+
+//Position& Position::operator= (const Position& p) {
+//	
+//};
 
 
 class Body{
@@ -90,22 +103,22 @@ Circle::~Circle() {
 class AABB : public Body// Axis Aligned Bounding Box
 {
 public:
-	AABB(Position& pos1, Position& pos2, Position& pos3, Position& pos4);
+	AABB(Position& min, Position& max);
 	~AABB();
 
-	void setMin(float i) {
-		min = i;
-	};
-	void setMax(float i) {
-		max = i;
-	};
+	//void setMin(float i) {
+	//	min = i;
+	//};
+	//void setMax(float i) {
+	//	max = i;
+	//};
 
 	void draw(const Display& screenSize) {
 		float vertices[] =
 		{
 			pos1.x / screenSize.width, pos1.y / screenSize.hieght, 0,// top right corner
-			pos2.x / screenSize.width, pos2.y / screenSize.hieght, 0,// top left corner
 			pos3.x / screenSize.width, pos3.y / screenSize.hieght, 0,// bottom left corner
+			pos2.x / screenSize.width, pos2.y / screenSize.hieght, 0,// top left corner
 			pos4.x / screenSize.width, pos4.y / screenSize.hieght, 0// bottom right corner
 		};
 		glEnableClientState(GL_VERTEX_ARRAY); // tell OpenGL that you're using a vertex array for fixed-function attribute
@@ -114,23 +127,26 @@ public:
 		glDisableClientState(GL_VERTEX_ARRAY); // tell OpenGL that you're finished using the vertex arrayattribute
 	}
 
-	float getMin() { return min; };
-	float getMax() { return max; };
+	Position getPosition1() { return pos1; }
+	Position getPosition2() { return pos2; }
+	Position getPosition3() { return pos3; }
+	Position getPosition4() { return pos4; }
 
 
 private:
-	float min, max;
 	Position pos1;
 	Position pos2;
 	Position pos3;
 	Position pos4;
 };
 
-AABB::AABB(Position& pos1, Position& pos2, Position& pos3, Position& pos4) { // Defaults to a Square
-	this->pos1 = pos1;
-	this->pos2 = pos2;
-	this->pos3 = pos3;
-	this->pos4 = pos4;
+AABB::AABB(Position& pos1, Position& pos2) { // Min , max
+	this->pos1 = pos1;//min
+	this->pos2 = pos2;//max
+	this->pos3.x = pos2.x;
+	this->pos3.y = pos1.y;//end pos 3
+	this->pos4.x = pos1.x;
+	this->pos4.y = pos2.y;//end point 4
 
 	positions.push_back((&this->pos4));
 	positions.push_back((&this->pos3));
