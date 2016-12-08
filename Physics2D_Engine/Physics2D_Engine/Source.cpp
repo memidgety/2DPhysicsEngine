@@ -24,7 +24,7 @@ int main(int argc, char* args[]) {
 	int screenWidth = 800;
 	int screenHieght = 800;
 
-	Circle c1(pos1);
+	Circle c1(pos1, 100);
 	AABB sq1(pos2, pos3, pos4, pos5);
 	Triangle T1(pos6, pos7, pos8);
 
@@ -38,7 +38,7 @@ int main(int argc, char* args[]) {
 		std::cout << "0";
 		display.fill(.1f, .1f, .1f, 1);
 
-		c1.draw(20, 36, display);
+		c1.draw(display);
 		c1.gravityScale();
 
 		sq1.draw(display);

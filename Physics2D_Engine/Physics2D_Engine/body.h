@@ -45,14 +45,14 @@ private:
 
 class Circle : public Body{
 public:
-	Circle(Position pos1);
+	Circle(Position pos1, float radius, int num_segments = 36);
 	~Circle();
 
 	//______Getters______
 
 	//______Setters______
 
-	void draw(float radius, int num_segments, const Display& screenSize)
+	void draw(const Display& screenSize)
 	{
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < num_segments; i++)
@@ -69,10 +69,15 @@ public:
 	};
 
 private:
+	float radius;
+	int num_segments;
 	Position pos1;
 };
 
-Circle::Circle(Position pos1) {
+Circle::Circle(Position pos1, float radius, int num_segments) {
+
+	this->radius = radius;
+	this->num_segments = num_segments;
 	this->pos1 = pos1;
 	positions.push_back((&this->pos1));
 }
