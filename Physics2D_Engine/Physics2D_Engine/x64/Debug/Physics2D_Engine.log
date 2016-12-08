@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-﻿Build started 12/7/2016 1:47:05 AM.
+﻿Build started 12/7/2016 4:30:41 PM.
      1>Project "C:\Users\meMidgety\Desktop\gitFolder\2DPhysicsEngine\Physics2D_Engine\Physics2D_Engine\Physics2D_Engine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\headers /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Display.cpp Mesh.cpp Shader.cpp Source.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\headers /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Source.cpp
          Source.cpp
-     1>c:\users\memidgety\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\body.h(63): warning C4305: 'initializing': truncation from 'double' to 'const float'
-         Shader.cpp
-     1>c:\users\memidgety\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\shader.cpp(48): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
-         Mesh.cpp
-         Display.cpp
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\meMidgety\Desktop\gitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\libs glew32.lib glew32s.lib OpenGL32.Lib SDL2.lib SDL2main.lib SDL2test.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\meMidgety\Desktop\gitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\meMidgety\Desktop\gitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.lib" /MACHINE:X64 x64\Debug\Display.obj
          x64\Debug\Mesh.obj
@@ -20,8 +13,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.38
-=======
-﻿  Source.cpp
-  Physics2D_Engine.vcxproj -> C:\Users\mchlk\Desktop\GitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe
->>>>>>> ec831284ab9e649f56cb23f5650125b299c009d8
+Time Elapsed 00:00:01.02
