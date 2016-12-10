@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="body.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="functions.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="shader.h" />
   </ItemGroup>

@@ -29,29 +29,48 @@ private:
 
 };
 
-//Position& Position::operator= (const Position& p) {
-//	
-//};
-
-
 class Body{
 public:
-	void gravityScale() {
+	Body() {
+		gravity.first = 0;
+		gravity.second = -1;
+	};
+
+	void Force() {
 		for (std::size_t i = 0; i < positions.size(); ++i) //for loop to go through accounts
 		{
 			Position * s = positions[i]; // set s to go through every account
 
-			s->y -= 1;
+			// --- adding gravity
+			s->x += gravity.first;
+			s->y += gravity.second;
 			positions[i] = s;
-
 		}
 	};
-protected:
-	vector <float> pos;
-	virtual void draw() {};
-	vector <Position*> positions;
-private:
 
+	std::pair<float, float> getVelocity() { return velocity; }
+	void setVelocity() { gravity.first = 0; gravity.second = 0; } // ---------PLEASE CHANGE ME----- testing code.
+
+	//---Getters
+	bool getIsColliding() { return isColliding; };
+	virtual string getType() { return "IM a boody"; };
+	virtual vector<Position*> getPositions() { return positions; };
+	virtual float getRadius() { return radius; };
+
+	//---Setters
+	void setIsColliding(bool coll) { isColliding = coll; };
+
+protected:
+	virtual void draw() {};
+	float radius;
+	vector <Position*> positions;
+	std::pair<float, float> velocity;
+
+	bool isColliding;
+	
+private:
+	string Type;
+	std::pair <float, float> gravity;
 };
 
 //________________CIRCLE__________________________________________________________________________________________________________C
@@ -81,7 +100,10 @@ public:
 		glEnd();
 	};
 
+	string getType() override { return Type; }
+	float getRadius() override { return radius; }
 private:
+	string Type = "Circle";
 	float radius;
 	int num_segments;
 	Position pos1;
@@ -132,8 +154,9 @@ public:
 	Position getPosition3() { return pos3; }
 	Position getPosition4() { return pos4; }
 
-
+	string getType() override { return Type; }
 private:
+	string Type = "AABB";
 	Position pos1;
 	Position pos2;
 	Position pos3;
@@ -148,10 +171,10 @@ AABB::AABB(Position& pos1, Position& pos2) { // Min , max
 	this->pos4.x = pos1.x;
 	this->pos4.y = pos2.y;//end point 4
 
-	positions.push_back((&this->pos4));
-	positions.push_back((&this->pos3));
-	positions.push_back((&this->pos2));
 	positions.push_back((&this->pos1));
+	positions.push_back((&this->pos2));
+	positions.push_back((&this->pos3));
+	positions.push_back((&this->pos4));
 }
 
 AABB::~AABB() {
@@ -187,7 +210,9 @@ public:
 	Position getPosition2() { return pos2; }
 	Position getPosition3() { return pos3; }
 
+	string getType() override { return Type; }
 private:
+	string Type = "Triangle";
 	Position pos1;
 	Position pos2;
 	Position pos3;
