@@ -64,7 +64,7 @@ int main(int argc, char* args[]) {
 		//std::cout << "0";
 		display.fill(.1f, .1f, .1f, 1);
 
-		cout << collisionDetection(c1, c2);
+		cout << collisionDetection(ground, c1);
 
 		ground.draw(display);
 

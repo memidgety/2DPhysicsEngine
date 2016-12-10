@@ -108,6 +108,41 @@ bool collisionDetection(Body& a, Body& b) {
 		return true;
 	}
 	if (a.getType() == "AABB" && b.getType() == "Circle") {
+		float sqDist = 0.0f;
+		float minX, minY, maxX, maxY;
 
+		Position  aPosMin = *aPos.at(0);
+		Position  aPosMax = *aPos.at(1);
+
+		Position AABBCenter;
+
+		Position circleCenter = *bPos.at(0);
+
+		float width = aPosMax.x - aPosMin.x;
+		float hieght = aPosMax.y - aPosMin.y;
+		
+		AABBCenter.x = ((aPosMax.x + aPosMin.x) / 2);
+		AABBCenter.y = ((aPosMax.y + aPosMin.y) / 2);
+
+		minX = AABBCenter.x - (width / 2);
+		maxX = AABBCenter.x + (width / 2);
+
+		minY = AABBCenter.y - (hieght / 2);
+		maxY = AABBCenter.y + (hieght / 2);
+
+		if (circleCenter.x < minX) 
+			sqDist += (minX - circleCenter.x) * (minX - circleCenter.x);
+		if (circleCenter.x > maxX)
+			sqDist += (circleCenter.x - maxX) * (circleCenter.x - maxX);
+
+		if (circleCenter.y < minY)
+			sqDist += (minY - circleCenter.y) * (minY - circleCenter.y);
+		if (circleCenter.y > maxY)
+			sqDist += (circleCenter.y - maxY) * (circleCenter.y - maxY);
+
+		if (pow(b.getRadius(), 2) < sqDist)
+			return false;
+
+		return true;
 	}
 }
