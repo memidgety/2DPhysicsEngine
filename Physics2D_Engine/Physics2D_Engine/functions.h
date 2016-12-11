@@ -5,8 +5,46 @@
 using namespace std;
 
 vector<Body> Objects;
+Position normal;
 
-void AABBVsAABB(Body& c, Body& d) {
+float DotProduct(Position& a, Position& b ) {
+	return ((a.x * b.x) + (a.y * b.y));
+}
+
+Position normalizeVector(Position& a) {
+	float mag = sqrt(pow(a.x, 2) + pow(a.y, 2));
+	a.x = a.x / mag;
+	a.y = a.y / mag;
+	return a;
+}
+
+void AABBVsAABB(Body& a, Body& b) {
+
+	normalizeVector(normal);
+	//normalizeVector(normal);
+	vector<Position*> aPos = a.getPositions();
+	vector<Position*> bPos = b.getPositions();
+
+	Position aCenter = a.getCenter();
+	Position bCenter = b.getCenter();
+
+	Position rVel = b.getVelocity() - a.getVelocity();
+	/*if (velAlongNormal > 0)
+		return;*/
+
+	//float j = -velAlongNormal; //j is speed
+	
+	//Position impulse = normal * j;
+	Position impulse;
+	impulse.x = normal.x * (rVel.x);
+	impulse.y = normal.y * (rVel.y);
+
+	Position negImpulse;
+	negImpulse.x = impulse.x * -1;
+	negImpulse.y = impulse.y * -1;
+
+	a.setVelocityWithBounce(negImpulse);
+	b.setVelocity(impulse);
 
 }
 
@@ -19,25 +57,6 @@ void AABBVsCircle(Body& c, Body& d) {
 }
 
 void applyVelocity(Body& a, Body& b) {
-
-	//Position  aPosMin;
-	//Position  aPosMax;
-	//Position  bPosMin;
-	//Position  bPosMax;
-
-	//aPosMin = a.getPosition1();
-	//aPosMax = a.getPosition2();
-	//bPosMin = b.getPosition1();
-	//bPosMax = b.getPosition2();
-
-	//if ((aPosMin.x < bPosMin.x) || (aPosMin.x > bPosMax.x))
-	//	return false;
-	//if ((aPosMax.y < bPosMin.y) || (aPosMin.y > bPosMax.y))
-	//	return false;
-	//else return true;
-
-	//cout << a.getType();
-	
 
 	if ((a.getType() == "AABB") && (b.getType() == "AABB")) {
 		AABBVsAABB(a, b);
@@ -71,7 +90,7 @@ bool collisionDetection(Body& a, Body& b) {
 	vector<Position*> aPos = a.getPositions();
 	vector<Position*> bPos = b.getPositions();
 
-	if (a.getType() == "AABB" && b.getType() == "AABB") {
+	if (a.getType() == "AABB" && b.getType() == "AABB") { // __________________________AABB_AABB
 
 		Position  aPosMin;
 		Position  aPosMax;
@@ -83,16 +102,55 @@ bool collisionDetection(Body& a, Body& b) {
 		bPosMin = *bPos.at(0);
 		bPosMax = *bPos.at(1);
 
-		cout << aPosMax.y << endl;
+		//cout << aPosMax.y << endl;
 
+		// --- Detects for collision via Seperating Axis - Theorem
 		if ((aPosMax.x < bPosMin.x) || (aPosMin.x > bPosMax.x))
 			return false;
 		if ((aPosMax.y < bPosMin.y) || (aPosMin.y > bPosMax.y))
 			return false;
 
+		// --- set the normal of the collision
+		//Position normalA = normalizeVector(a.getVelocity());
+		//Position normalB = normalizeVector(b.getVelocity());
+
+		normal = b.getCenter() - a.getCenter();
+		//Position n = b.getCenter() - a.getCenter();
+
+		//// --- find half of width for both shapes.
+		//float aExtent = (aPosMax.x - aPosMin.x) / 2;
+		//float bExtent = (bPosMax.x - bPosMin.x) / 2;
+
+		//// --- calculate overlap
+		//float xOverlap = (aExtent + bExtent) - abs(n.x);
+
+		//if (xOverlap > 0) {
+		//	// --- check for y overlap
+		//	float aExtent = (aPosMax.y - aPosMin.y) / 2;
+		//	float bExtent = (bPosMax.y - bPosMin.y) / 2;
+		//	float yOverlap = (aExtent + bExtent) - abs(n.y);
+
+		//	if (yOverlap > 0) {		// check if object is colliding with top or bottom of AABB
+		//		if (xOverlap > yOverlap) { // if xOverlap is greater, object is colliding Horizontally
+		//			if (n.x < 0) { cout << "case 1"; normal.x += -1; normal.y += 0; }
+		//			else { cout << "case 2"; normal.x += 0; normal.y += 0; }
+		//			normalizeVector(normal);
+		//			applyVelocity(a, b);
+		//			return true;
+		//		}
+		//	}
+		//	else {
+		//		if (n.y < 0) { cout << "case 3"; normal.x += 0; normal.y += -1;}
+		//		else { cout << "case 4"; normal.x += 0; normal.y += 1; }
+		//		applyVelocity(a, b);
+		//		return true;
+		//	}
+		//}
+
+		applyVelocity(a, b);
 		return true;
 	}
-	if (a.getType() == "Circle" && b.getType() == "Circle") {
+	if (a.getType() == "Circle" && b.getType() == "Circle") { // ________________________Circle_Circle
 
 		Position  aCenter;
 		Position  bCenter;
@@ -107,22 +165,20 @@ bool collisionDetection(Body& a, Body& b) {
 		}
 		return true;
 	}
-	if (a.getType() == "AABB" && b.getType() == "Circle") {
+	if (a.getType() == "AABB" && b.getType() == "Circle") { // __________________________AABB_Cricle
 		float sqDist = 0.0f;
 		float minX, minY, maxX, maxY;
 
+		//initialize a.min and a.max
 		Position  aPosMin = *aPos.at(0);
 		Position  aPosMax = *aPos.at(1);
 
-		Position AABBCenter;
+		Position AABBCenter = a.getCenter();
 
 		Position circleCenter = *bPos.at(0);
 
 		float width = aPosMax.x - aPosMin.x;
 		float hieght = aPosMax.y - aPosMin.y;
-		
-		AABBCenter.x = ((aPosMax.x + aPosMin.x) / 2);
-		AABBCenter.y = ((aPosMax.y + aPosMin.y) / 2);
 
 		minX = AABBCenter.x - (width / 2);
 		maxX = AABBCenter.x + (width / 2);

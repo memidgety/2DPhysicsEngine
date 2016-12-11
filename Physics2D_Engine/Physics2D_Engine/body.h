@@ -23,6 +23,24 @@ public:
 		return *this;
 	}
 
+	Position& operator+ (const Position& p) {
+		this->x += p.x;
+		this->y += p.y;
+		return *this;
+	}
+
+	Position& operator- (const Position& p) {
+		this->x -= p.x;
+		this->y -= p.y;
+		return *this;
+	}
+
+	//Position& operator* (const float& s) { // s for scalar
+	//	this->x = s * this->x;
+	//	this->y = s * this->y;
+	//	return *this;
+	//}
+
 	float x;
 	float y;
 private:
@@ -40,31 +58,37 @@ public:
 		for (std::size_t i = 0; i < positions.size(); ++i) //for loop to go through accounts
 		{
 			Position * s = positions[i]; // set s to go through every account
+			s->x += velocity.x;
+			s->y += velocity.y;
 
 			// --- adding gravity
-			s->x += gravity.first;
-			s->y += gravity.second;
+			//s->x += gravity.first;
+			//s->y += gravity.second;
 			positions[i] = s;
 		}
 	};
 
-	std::pair<float, float> getVelocity() { return velocity; }
-	void setVelocity() { gravity.first = 0; gravity.second = 0; } // ---------PLEASE CHANGE ME----- testing code.
+	
 
 	//---Getters
+	Position getVelocity() { cout << velocity.x << ", " << velocity.y << endl; return velocity; }
 	bool getIsColliding() { return isColliding; };
 	virtual string getType() { return "IM a boody"; };
+	virtual Position getCenter() { return center; }
 	virtual vector<Position*> getPositions() { return positions; };
 	virtual float getRadius() { return radius; };
 
 	//---Setters
 	void setIsColliding(bool coll) { isColliding = coll; };
+	void setVelocity( Position imp) { velocity.x += imp.x; velocity.y += imp.y; } // if both objects have force, they will bounce / if only one object has a force it will stop
+	void setVelocityWithBounce(Position imp) { velocity.x = imp.x; velocity.y = imp.y; } //if only one object has a force it will bounce
 
 protected:
 	virtual void draw() {};
 	float radius;
 	vector <Position*> positions;
-	std::pair<float, float> velocity;
+	Position velocity;
+	Position center;
 
 	bool isColliding;
 	
@@ -153,6 +177,12 @@ public:
 	Position getPosition2() { return pos2; }
 	Position getPosition3() { return pos3; }
 	Position getPosition4() { return pos4; }
+	Position getCenter() override{
+		Position center;
+		center.x = (pos1.x + pos2.x) / 2;
+		center.y = (pos1.y + pos2.y) / 2;
+		return center;
+	}
 
 	string getType() override { return Type; }
 private:

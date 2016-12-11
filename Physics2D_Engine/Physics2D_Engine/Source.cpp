@@ -17,30 +17,17 @@ Position pos6(-240, 100);
 Position pos7(-260, 0);
 Position pos8(-220, 0);
 
-Position gMin(-400, -400);
-Position gMax(400,-350);
+Position gMin(-400, 350);
+Position gMax(400,400);
+
+Position initialForce(2, 3);
+Position initialForce2(0, 0);
 
 
-//______________________Collision Test__________
-//bool collision(AABB& a, AABB& b) {
-//
-//	Position  aPosMin;
-//	Position  aPosMax;
-//	Position  bPosMin;
-//	Position  bPosMax;
-//
-//	aPosMin = a.getPosition1();
-//	aPosMax = a.getPosition2();
-//	bPosMin = b.getPosition1();
-//	bPosMax = b.getPosition2();
-//
-//	if ((aPosMin.x < bPosMin.x) || (aPosMin.x > bPosMax.x))
-//		return false;
-//	if ((aPosMax.y < bPosMin.y) || (aPosMin.y > bPosMax.y))
-//		return false;
-//	else return true;
-//}
-
+void printPos(Body& a) {
+	Position center = a.getCenter();
+	cout << center.x << "," << center.y << endl;
+}
 
 int main(int argc, char* args[]) {
 	std::cout << "helloworld!" << std::endl;
@@ -58,28 +45,24 @@ int main(int argc, char* args[]) {
 
 	Shader shader("./res/basicShader");
 
-
+	sq1.setVelocity(initialForce);
+	ground.setVelocity(initialForce2);
 
 	while (!display.getIsClosed()) {	
 		//std::cout << "0";
 		display.fill(.1f, .1f, .1f, 1);
 
-		cout << collisionDetection(ground, c1);
+		collisionDetection(sq1, ground);
 
 		ground.draw(display);
-
-		c2.draw(display);
-		c1.draw(display);
-		c1.Force();
+		//ground.Force();
 
 		sq1.draw(display);
 	    sq1.Force();
 
-		T1.draw(display);
-		T1.Force();
-
 		shader.Bind();
 
+		printPos(sq1);
 		//collision(sq1, ground);
 		//std::cout << collision(sq1, ground);
 
