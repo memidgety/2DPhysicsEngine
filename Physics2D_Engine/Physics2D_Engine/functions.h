@@ -31,18 +31,24 @@ void AABBVsAABB(Body& a, Body& b) {
 	float j = rVel.x;
 	float k = rVel.y;
 
-	Position impulse;
-	impulse.x = normal.x * j;
-	impulse.y = normal.y  * k;
-
-	Position negimpulse;
-	negimpulse.x = normal.x * -j;
-	negimpulse.y = normal.y  * -k;
-
 	if ((b.getVelocity().x == 0) && (b.getVelocity().y == 0)) {
+		Position impulse;
+		impulse.x = normal.x * j;
+		impulse.y = normal.y  * k;
+
+		Position negimpulse;
+		negimpulse.x = normal.x * -j;
+		negimpulse.y = normal.y  * -k;
 		a.setVelocityWithBounce(negimpulse);
 	}
 	else {
+		Position impulse;
+		impulse.x = normal.x * -j;
+		impulse.y = normal.y  * k;
+
+		Position negimpulse;
+		negimpulse.x = normal.x * j;
+		negimpulse.y = normal.y  * -k;
 		a.setVelocity(negimpulse);
 		b.setVelocity(impulse);
 	}
@@ -121,42 +127,52 @@ bool collisionDetection(Body& a, Body& b) {
 		//Position normalB = normalizeVector(b.getVelocity());
 		Position n = b.getCenter() - a.getCenter();
 
-		normal = n;
-		// --- find half of width for both shapes.
-		float aExtent = (aPosMax.x - aPosMin.x) / 2;
-		float bExtent = (bPosMax.x - bPosMin.x) / 2;
+		// check if n.x > 0
+		// check if n.y > 0
+		// check if n.x > n.y
+		// returns 8 cases;
 
-		// --- calculate overlap
-		float xOverlap = (aExtent + bExtent) - abs(n.x);
-		
-		if (xOverlap > 0) {
-			// --- check for y overlap
-			float aExtent = (aPosMax.y - aPosMin.y) / 2;
-			float bExtent = (bPosMax.y - bPosMin.y) / 2;
-			float yOverlap = (aExtent + bExtent) - abs(n.y);
 
-			if (yOverlap > 0) {		// check if object is colliding with top or bottom of AABB
-				if (xOverlap > yOverlap) { // if xOverlap is greater, object is colliding Horizontally
-					if (n.x < 0) { cout << "case 1" << endl; normal.x = 1; normal.y = -1; } // underside positive x
-					else { cout << "case 2" << endl; normal.x = 1; normal.y = -1; } // underside negative x
-					applyVelocity(a, b);
-					return true;
-				}
-				else {
-					if (n.y < 0) { cout << "case 3" << endl; normal.x = -1; normal.y = 1; }
-					else { cout << "case 4" << endl; normal.x = -1; normal.y = 1; }
-					applyVelocity(a, b);
-					return true;
-				}
-			}
-			else {
-				if (n.y < 0) { cout << "case 5" << endl; normal.x = 1; normal.y = -1; }
-				else { cout << "case 6" << endl; normal.x = 1; normal.y = -1; }
-				applyVelocity(a, b);
-				return true;
-			}
-		}
+		//// --- find half of width for both shapes.
+		//float aExtent = (aPosMax.x - aPosMin.x) / 2;
+		//float bExtent = (bPosMax.x - bPosMin.x) / 2;
 
+		//// --- calculate overlap
+		//float xOverlap = (aExtent + bExtent) - abs(n.x);
+		//
+		//if (xOverlap > 0) {
+		//	// --- check for y overlap
+		//	float aExtent = (aPosMax.y - aPosMin.y) / 2;
+		//	float bExtent = (bPosMax.y - bPosMin.y) / 2;
+		//	float yOverlap = (aExtent + bExtent) - abs(n.y);
+
+		//	if (yOverlap > 0) {		// check if object is colliding with top or bottom of AABB
+		//		if (xOverlap > yOverlap) { // if xOverlap is greater, object is colliding Horizontally
+		//			if (n.x < 0) { cout << "case 1" << endl; normal.x = 1; normal.y = -1; } // underside positive x
+		//			else { cout << "case 2" << endl; normal.x = 1; normal.y = -1; } // underside negative x
+		//			/*applyVelocity(a, b);
+		//			return true;*/
+		//		}
+		//		else {
+		//			if (n.y < 0) { cout << "case 3" << endl; normal.x = -1; normal.y = 1; }
+		//			else { cout << "case 4" << endl; normal.x = -1; normal.y = 1; }
+		//			/*applyVelocity(a, b);
+		//			return true;*/
+		//		}
+		//	}
+		//	else {
+		//		if (n.y < 0) { cout << "case 5" << endl; normal.x = 1; normal.y = -1; }
+		//		else { cout << "case 6" << endl; normal.x = 1; normal.y = -1; }
+		//		/*applyVelocity(a, b);
+		//		return true;*/
+		//	}
+		//}
+		//else {
+		//	if (n.x < 0) { // if xOverlap is greater, object is colliding Horizontally
+		//		if (n.x < 0) { cout << "case 7" << endl; normal.x = 1; normal.y = -1; } // 
+		//		else { cout << "case 8" << endl; normal.x = 1; normal.y = -1; } //
+		//	}
+		//}
 		applyVelocity(a, b);
 		return true;
 	}

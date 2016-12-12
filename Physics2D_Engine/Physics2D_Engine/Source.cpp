@@ -35,7 +35,7 @@ Position g4Min(600, -600);
 
 Position initialForce(-0.2, 0.3);
 Position initialForce2(0, 0);
-Position initialForce3(0.1, 0.1);
+Position initialForce3(0.5, 0);
 
 
 void printPos(Body& a) {

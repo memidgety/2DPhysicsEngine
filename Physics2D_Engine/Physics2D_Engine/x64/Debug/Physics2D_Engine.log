@@ -1,4 +1,3 @@
 ﻿  Source.cpp
 c:\users\mchlk\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\source.cpp(36): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\mchlk\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\source.cpp(38): warning C4305: 'argument': truncation from 'double' to 'float'
   Physics2D_Engine.vcxproj -> C:\Users\mchlk\Desktop\GitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe
