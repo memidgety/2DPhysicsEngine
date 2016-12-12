@@ -39,8 +39,15 @@ void AABBVsAABB(Body& a, Body& b) {
 	negimpulse.x = normal.x * -j;
 	negimpulse.y = normal.y  * -k;
 
-	a.setVelocityWithBounce(negimpulse);
-	//b.setVelocityWithBounce(impulse);
+	if ((b.getVelocity().x == 0) && (b.getVelocity().y == 0)) {
+		a.setVelocityWithBounce(negimpulse);
+	}
+	else {
+		a.setVelocity(negimpulse);
+		b.setVelocity(impulse);
+	}
+	
+	
 
 }
 
@@ -82,6 +89,9 @@ void applyVelocity(Body& a, Body& b) {
 
 // ------------
 bool collisionDetection(Body& a, Body& b) {
+
+	normal.x = 0;
+	normal.y = 0;
 
 	vector<Position*> aPos = a.getPositions();
 	vector<Position*> bPos = b.getPositions();
@@ -132,10 +142,16 @@ bool collisionDetection(Body& a, Body& b) {
 					applyVelocity(a, b);
 					return true;
 				}
+				else {
+					if (n.y < 0) { cout << "case 3" << endl; normal.x = -1; normal.y = 1; }
+					else { cout << "case 4" << endl; normal.x = -1; normal.y = 1; }
+					applyVelocity(a, b);
+					return true;
+				}
 			}
 			else {
-				if (n.y < 0) { cout << "case 3" << endl; normal.x = 1; normal.y = 1;}
-				else { cout << "case 4" << endl; normal.x = 1; normal.y = 1; }
+				if (n.y < 0) { cout << "case 5" << endl; normal.x = 1; normal.y = -1; }
+				else { cout << "case 6" << endl; normal.x = 1; normal.y = -1; }
 				applyVelocity(a, b);
 				return true;
 			}

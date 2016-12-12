@@ -14,6 +14,9 @@ Position pos2(100, -200);
 Position sqMax(-30,-30);
 Position sqMin(-60,-60);
 
+Position sqMin1(30, 30);
+Position sqMax1(60, 60);
+
 Position pos6(-240, 100);
 Position pos7(-260, 0);
 Position pos8(-220, 0);
@@ -30,8 +33,9 @@ Position g3Min(-800, -600);
 Position g4Max(800, 600);
 Position g4Min(600, -600);
 
-Position initialForce(-0.2, 0);
+Position initialForce(-0.2, 0.3);
 Position initialForce2(0, 0);
+Position initialForce3(0.1, 0.1);
 
 
 void printPos(Body& a) {
@@ -48,6 +52,7 @@ int main(int argc, char* args[]) {
 	Circle c1(pos1, 100);
 	Circle c2(pos2, 50);
 	AABB sq1(sqMin,sqMax);
+	AABB sq2(sqMin1, sqMax1);
 	AABB ground(g1Min, g1Max);
 	AABB ground2(g2Min, g2Max);
 	AABB ground3(g3Min, g3Max);
@@ -59,7 +64,8 @@ int main(int argc, char* args[]) {
 
 	Shader shader("./res/basicShader");
 
-	sq1.setVelocity(initialForce);
+	sq1.setVelocity(initialForce3);
+	sq2.setVelocity(initialForce3);
 	ground.setVelocity(initialForce2);
 
 	while (!display.getIsClosed()) {	
@@ -68,6 +74,13 @@ int main(int argc, char* args[]) {
 		collisionDetection(sq1, ground2);
 		collisionDetection(sq1, ground3);
 		collisionDetection(sq1, ground4);
+
+		collisionDetection(sq2, ground);
+		collisionDetection(sq2, ground2);
+		collisionDetection(sq2, ground3);
+		collisionDetection(sq2, ground4);
+
+		collisionDetection(sq1, sq2);
 
 		display.fill(.1f, .1f, .1f, 1);
 
@@ -78,6 +91,9 @@ int main(int argc, char* args[]) {
 		ground3.draw(display);
 		ground4.draw(display);
 		//ground.Force();
+
+		sq2.Force();
+		sq2.draw(display);
 
 		sq1.Force();
 		sq1.draw(display);
