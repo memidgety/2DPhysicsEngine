@@ -1,7 +1,7 @@
 #pragma once
 #include "body.h"
-#include<cmath>
-
+#include <math.h>s
+#include <cmath>
 using namespace std;
 
 vector<Body> Objects;
@@ -39,18 +39,34 @@ void AABBVsAABB(Body& a, Body& b) {
 		Position negimpulse;
 		negimpulse.x = normal.x * -j;
 		negimpulse.y = normal.y  * -k;
+
 		a.setVelocityWithBounce(negimpulse);
 	}
 	else {
+		/*rVel.x = abs(b.getVelocity().x) - abs(a.getVelocity().x);
+		rVel.y = abs(b.getVelocity().y )- abs(a.getVelocity().y);*/
+
+		Position tempVela = a.getVelocity();
+		Position tempVelb = b.getVelocity();
+
+		Position rVel = b.getVelocity() - a.getVelocity();
+
+		/*float j = (0.5) * (pow(rVel.x, 2));
+		float k = (0.5) * (pow(rVel.y, 2));*/
+
+		j = rVel.x;
+		k = rVel.y;
+
 		Position impulse;
-		impulse.x = normal.x * -j;
-		impulse.y = normal.y  * k;
+		impulse.x = normal.x * j;
+		impulse.y = normal.y  * -k;
 
 		Position negimpulse;
-		negimpulse.x = normal.x * j;
-		negimpulse.y = normal.y  * -k;
-		a.setVelocity(negimpulse);
-		b.setVelocity(impulse);
+		negimpulse.x = normal.x * -j;
+		negimpulse.y = normal.y  * k;
+
+		a.setVelocityWithBounce(tempVelb);
+		b.setVelocityWithBounce(tempVela);
 	}
 	
 	
@@ -126,8 +142,69 @@ bool collisionDetection(Body& a, Body& b) {
 		//Position normalA = normalizeVector(a.getVelocity());
 		//Position normalB = normalizeVector(b.getVelocity());
 		Position n = b.getCenter() - a.getCenter();
+		float absX = abs(b.getCenter().x ) - abs(a.getCenter().x);
+		float absY = abs(b.getCenter().y ) - abs(a.getCenter().y);
 
-		// check if n.x > 0
+
+		/*float absX = abs(n.x);
+		float absY = abs(n.y);*/
+
+		if ((n.x < 0) && (n.y < 0) && (absX) < (absY)) {
+			cout << "case 1"<< endl;  
+			normal.x = 1; 
+			normal.y = -1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x < 0) && (n.y < 0) && (absX) > (absY)) {
+			cout << "case 2"<< endl;  
+			normal.x = -1;
+			normal.y = 1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x < 0) && (n.y > 0) && (absX) > (absY)) {
+			cout << "case 3"<< endl; 
+			normal.x = -1; normal.y = 1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x < 0) && (n.y > 0) && (absX) < (absY)) {
+			cout << "case 4"<< endl;  
+			normal.x = 1; 
+			normal.y = -1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x > 0) && (n.y > 0) && (absX) < (absY)) {
+			cout << "case 5"<< endl;  
+			normal.x = 1; 
+			normal.y = -1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x > 0) && (n.y > 0) && (absX) > (absY)) {
+			cout << "case 6"<< endl;  
+			normal.x = -1; 
+			normal.y = 1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x > 0) && (n.y < 0) && (absX) > (absY)) {
+			cout << "case 7"<< endl;  
+			normal.x = -1; 
+			normal.y = 1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		if ((n.x > 0) && (n.y < 0) && (absX) < (absY)) {
+			cout << "case 8"<< endl;  
+			normal.x = 1; 
+			normal.y = -1; 		
+			applyVelocity(a, b);
+			return true;
+		}
+		// check if n.x > 0														
 		// check if n.y > 0
 		// check if n.x > n.y
 		// returns 8 cases;
@@ -173,8 +250,6 @@ bool collisionDetection(Body& a, Body& b) {
 		//		else { cout << "case 8" << endl; normal.x = 1; normal.y = -1; } //
 		//	}
 		//}
-		applyVelocity(a, b);
-		return true;
 	}
 	if (a.getType() == "Circle" && b.getType() == "Circle") { // ________________________Circle_Circle
 

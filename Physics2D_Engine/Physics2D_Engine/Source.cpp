@@ -11,11 +11,11 @@
 Position pos1(100, 100);
 Position pos2(100, -200);
 
-Position sqMax(-30,-30);
+Position sqMax(0,0);
 Position sqMin(-60,-60);
 
 Position sqMin1(30, 30);
-Position sqMax1(60, 60);
+Position sqMax1(90, 90);
 
 Position pos6(-240, 100);
 Position pos7(-260, 0);
@@ -33,9 +33,9 @@ Position g3Min(-800, -600);
 Position g4Max(800, 600);
 Position g4Min(600, -600);
 
-Position initialForce(-0.2, 0.3);
+Position initialForce(-0.6, 0.3);
 Position initialForce2(0, 0);
-Position initialForce3(0.5, 0);
+Position initialForce3(0.5, 0.1);
 
 
 void printPos(Body& a) {
@@ -65,7 +65,7 @@ int main(int argc, char* args[]) {
 	Shader shader("./res/basicShader");
 
 	sq1.setVelocity(initialForce3);
-	sq2.setVelocity(initialForce3);
+	sq2.setVelocity(initialForce);
 	ground.setVelocity(initialForce2);
 
 	while (!display.getIsClosed()) {	
