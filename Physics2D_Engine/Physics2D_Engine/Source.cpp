@@ -7,20 +7,30 @@
 #include "body.h"
 #include "functions.h"
 
+
 Position pos1(100, 100);
 Position pos2(100, -200);
 
-Position sqMin(-30,-30);
-Position sqMax(-60,-60);
+Position sqMax(-30,-30);
+Position sqMin(-60,-60);
 
 Position pos6(-240, 100);
 Position pos7(-260, 0);
 Position pos8(-220, 0);
 
-Position gMin(-400, 350);
-Position gMax(400,400);
+Position g1Max(600, 800);
+Position g1Min(-600,600);
 
-Position initialForce(2, 3);
+Position g2Max(600, -600);
+Position g2Min(-600, -800);
+
+Position g3Max(-600, 600);
+Position g3Min(-800, -600);
+
+Position g4Max(800, 600);
+Position g4Min(600, -600);
+
+Position initialForce(-0.2, 0);
 Position initialForce2(0, 0);
 
 
@@ -38,7 +48,11 @@ int main(int argc, char* args[]) {
 	Circle c1(pos1, 100);
 	Circle c2(pos2, 50);
 	AABB sq1(sqMin,sqMax);
-	AABB ground(gMin, gMax);
+	AABB ground(g1Min, g1Max);
+	AABB ground2(g2Min, g2Max);
+	AABB ground3(g3Min, g3Max);
+	AABB ground4(g4Min, g4Max);
+
 	Triangle T1(pos6, pos7, pos8);
 
 	Display display(screenWidth, screenHieght, "HelloWorld");
@@ -50,22 +64,29 @@ int main(int argc, char* args[]) {
 
 	while (!display.getIsClosed()) {	
 		//std::cout << "0";
+		collisionDetection(sq1, ground);
+		collisionDetection(sq1, ground2);
+		collisionDetection(sq1, ground3);
+		collisionDetection(sq1, ground4);
+
 		display.fill(.1f, .1f, .1f, 1);
 
-		collisionDetection(sq1, ground);
+		
 
 		ground.draw(display);
+		ground2.draw(display);
+		ground3.draw(display);
+		ground4.draw(display);
 		//ground.Force();
 
+		sq1.Force();
 		sq1.draw(display);
-	    sq1.Force();
 
 		shader.Bind();
 
-		printPos(sq1);
+		//printPos(sq1);
 		//collision(sq1, ground);
 		//std::cout << collision(sq1, ground);
-
 		display.Update();
 
 		//display.setIsClosed(true);
