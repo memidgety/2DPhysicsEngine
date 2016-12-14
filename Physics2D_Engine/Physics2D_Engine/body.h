@@ -14,7 +14,6 @@ public:
 	};
 
 	Position(float x, float y) : x(x), y(y) {};
-
 	~Position() {};
 
 	Position& operator= (const Position& p) {
@@ -68,10 +67,8 @@ public:
 		}
 	};
 
-	
-
 	//---Getters
-	Position getVelocity() { cout << velocity.x << ", " << velocity.y << endl; return velocity; }
+	Position getVelocity() { /*cout << velocity.x << ", " << velocity.y << endl;*/ return velocity; }
 	bool getIsColliding() { return isColliding; };
 	virtual string getType() { return "IM a boody"; };
 	virtual Position getCenter() { return center; }
@@ -104,10 +101,6 @@ public:
 	Circle(Position pos1, float radius, int num_segments = 36);
 	~Circle();
 
-	//______Getters______
-
-	//______Setters______
-
 	void draw(const Display& screenSize)
 	{
 		glBegin(GL_LINE_LOOP);
@@ -124,6 +117,7 @@ public:
 		glEnd();
 	};
 
+	//______Getters______
 	string getType() override { return Type; }
 	float getRadius() override { return radius; }
 private:
@@ -151,13 +145,6 @@ class AABB : public Body// Axis Aligned Bounding Box
 public:
 	AABB(Position& min, Position& max);
 	~AABB();
-
-	//void setMin(float i) {
-	//	min = i;
-	//};
-	//void setMax(float i) {
-	//	max = i;
-	//};
 
 	void draw(const Display& screenSize) {
 		float vertices[] =

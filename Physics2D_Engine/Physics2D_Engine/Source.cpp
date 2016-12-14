@@ -9,13 +9,16 @@
 
 
 Position pos1(100, 100);
-Position pos2(100, -200);
+Position pos2(400, 150);
 
 Position sqMax(0,0);
 Position sqMin(-60,-60);
 
 Position sqMin1(30, 30);
 Position sqMax1(90, 90);
+
+Position sqMin2(200, 200);
+Position sqMax2(260, 260);
 
 Position pos6(-240, 100);
 Position pos7(-260, 0);
@@ -33,9 +36,13 @@ Position g3Min(-800, -600);
 Position g4Max(800, 600);
 Position g4Min(600, -600);
 
-Position initialForce(-0.6, 0.3);
+Position initialForce(-6, 3);
 Position initialForce2(0, 0);
-Position initialForce3(0.5, 0.1);
+Position initialForce3(5, 1);
+Position initialForce4(1, -4);
+
+Position cf1(1, 0);
+Position cf2(-1, 0);
 
 
 void printPos(Body& a) {
@@ -50,9 +57,10 @@ int main(int argc, char* args[]) {
 	int screenHieght = 800;
 
 	Circle c1(pos1, 100);
-	Circle c2(pos2, 50);
+	Circle c2(pos2, 100);
 	AABB sq1(sqMin,sqMax);
 	AABB sq2(sqMin1, sqMax1);
+	AABB sq3(sqMin2, sqMax2);
 	AABB ground(g1Min, g1Max);
 	AABB ground2(g2Min, g2Max);
 	AABB ground3(g3Min, g3Max);
@@ -66,7 +74,11 @@ int main(int argc, char* args[]) {
 
 	sq1.setVelocity(initialForce3);
 	sq2.setVelocity(initialForce);
+	sq3.setVelocity(initialForce4);
 	ground.setVelocity(initialForce2);
+
+	c1.setVelocity(cf1);
+	c2.setVelocity(cf2);
 
 	while (!display.getIsClosed()) {	
 		//std::cout << "0";
@@ -80,7 +92,17 @@ int main(int argc, char* args[]) {
 		collisionDetection(sq2, ground3);
 		collisionDetection(sq2, ground4);
 
+		collisionDetection(sq3, ground);
+		collisionDetection(sq3, ground2);
+		collisionDetection(sq3, ground3);
+		collisionDetection(sq3, ground4);
+
 		collisionDetection(sq1, sq2);
+		collisionDetection(sq1, sq3);
+		collisionDetection(sq2, sq3);
+
+
+		//collisionDetection(c1, c2);
 
 		display.fill(.1f, .1f, .1f, 1);
 
@@ -91,6 +113,14 @@ int main(int argc, char* args[]) {
 		ground3.draw(display);
 		ground4.draw(display);
 		//ground.Force();
+
+		//c1.Force();
+		//c1.draw(display);
+		//c2.Force();
+		//c2.draw(display);
+
+		sq3.Force();
+		sq3.draw(display);
 
 		sq2.Force();
 		sq2.draw(display);

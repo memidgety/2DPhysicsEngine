@@ -20,6 +20,8 @@ Position normalizeVector(Position& a) {
 
 void AABBVsAABB(Body& a, Body& b) {
 
+	cout << "Boop" << endl;
+
 	vector<Position*> aPos = a.getPositions();
 	vector<Position*> bPos = b.getPositions();
 
@@ -73,8 +75,41 @@ void AABBVsAABB(Body& a, Body& b) {
 
 }
 
-void CircleVsCircle(Body& c, Body& d) {
+void CircleVsCircle(Body& a, Body& b) { // check resolveCollision 
+	vector<Position*> aPos = a.getPositions();
+	vector<Position*> bPos = b.getPositions();
 
+	Position aCenter = a.getCenter();
+	Position bCenter = b.getCenter();
+
+	Position rVel = b.getVelocity() - a.getVelocity();
+
+	float j = rVel.x;
+	float k = rVel.y;
+
+	// --- WIP
+
+	Position tempVela = a.getVelocity();
+	Position tempVelb = b.getVelocity();
+
+	//Position rVel = b.getVelocity() - a.getVelocity();
+
+	/*float j = (0.5) * (pow(rVel.x, 2));
+	float k = (0.5) * (pow(rVel.y, 2));*/
+
+	j = normal.x;
+	k = normal.y; 
+
+	Position impulse;
+	impulse.x = normal.x * j;
+	impulse.y = normal.y  * -k;
+
+	Position negimpulse;
+	negimpulse.x = normal.x * -j;
+	negimpulse.y = normal.y  * k;
+
+	a.setVelocityWithBounce(tempVelb);
+	b.setVelocityWithBounce(tempVela);
 }
 
 void AABBVsCircle(Body& c, Body& d) {
@@ -99,12 +134,9 @@ void applyVelocity(Body& a, Body& b) {
 			AABBVsCircle(a,b);
 		}
 	}
-
 	//if ((a.getType() == "Circle") && (a.getType() == "Triangle")) {}
 	//if ((a.getType() == "AABB") && (a.getType() == "Triangle")) {}
 	//if ((a.getType() == "Triangle") && (a.getType() == "Triangle")) {}
-
-
 }
 
 
@@ -130,8 +162,6 @@ bool collisionDetection(Body& a, Body& b) {
 		bPosMin = *bPos.at(0);
 		bPosMax = *bPos.at(1);
 
-		//cout << aPosMax.y << endl;
-
 		// --- Detects for collision via Seperating Axis - Theorem
 		if ((aPosMax.x < bPosMin.x) || (aPosMin.x > bPosMax.x))
 			return false;
@@ -145,60 +175,59 @@ bool collisionDetection(Body& a, Body& b) {
 		float absX = abs(b.getCenter().x ) - abs(a.getCenter().x);
 		float absY = abs(b.getCenter().y ) - abs(a.getCenter().y);
 
-
 		/*float absX = abs(n.x);
 		float absY = abs(n.y);*/
 
 		if ((n.x < 0) && (n.y < 0) && (absX) < (absY)) {
-			cout << "case 1"<< endl;  
+			//cout << "case 1"<< endl;  
 			normal.x = 1; 
 			normal.y = -1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x < 0) && (n.y < 0) && (absX) > (absY)) {
-			cout << "case 2"<< endl;  
+			//cout << "case 2"<< endl;  
 			normal.x = -1;
 			normal.y = 1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x < 0) && (n.y > 0) && (absX) > (absY)) {
-			cout << "case 3"<< endl; 
+			//cout << "case 3"<< endl; 
 			normal.x = -1; normal.y = 1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x < 0) && (n.y > 0) && (absX) < (absY)) {
-			cout << "case 4"<< endl;  
+			//cout << "case 4"<< endl;  
 			normal.x = 1; 
 			normal.y = -1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x > 0) && (n.y > 0) && (absX) < (absY)) {
-			cout << "case 5"<< endl;  
+			//cout << "case 5"<< endl;  
 			normal.x = 1; 
 			normal.y = -1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x > 0) && (n.y > 0) && (absX) > (absY)) {
-			cout << "case 6"<< endl;  
+			//cout << "case 6"<< endl;  
 			normal.x = -1; 
 			normal.y = 1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x > 0) && (n.y < 0) && (absX) > (absY)) {
-			cout << "case 7"<< endl;  
+			//cout << "case 7"<< endl;  
 			normal.x = -1; 
 			normal.y = 1; 		
 			applyVelocity(a, b);
 			return true;
 		}
 		if ((n.x > 0) && (n.y < 0) && (absX) < (absY)) {
-			cout << "case 8"<< endl;  
+			//cout << "case 8"<< endl;  
 			normal.x = 1; 
 			normal.y = -1; 		
 			applyVelocity(a, b);
@@ -264,6 +293,16 @@ bool collisionDetection(Body& a, Body& b) {
 		if ((pow(r,2)) < distance ) {
 			return false;
 		}
+		//cout << "colliding C" << endl; Norman Pham and Michael Kilmer's Code.
+		Position n;// (bCenter - aCenter); // vector from b to a; use dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
+		
+		n.x = bCenter.x - aCenter.x;
+		n.y = bCenter.y - aCenter.y;
+
+		normal.x = -n.y;
+		normal.y = n.x;
+
+		applyVelocity(a, b);
 		return true;
 	}
 	if (a.getType() == "AABB" && b.getType() == "Circle") { // __________________________AABB_Cricle
