@@ -1,10 +1,10 @@
 #pragma once
 #include "body.h"
-#include <math.h>s
+#include <math.h>
 #include <cmath>
 using namespace std;
 
-vector<Body> Objects;
+vector<Body*> Objects;
 Position normal;
 
 float DotProduct(Position& a, Position& b ) {
@@ -18,22 +18,22 @@ Position normalizeVector(Position& a) {
 	return a;
 }
 
-void AABBVsAABB(Body& a, Body& b) {
+void AABBvsAABB(Body* a, Body* b) {
 
 	cout << "Boop" << endl;
 
-	vector<Position*> aPos = a.getPositions();
-	vector<Position*> bPos = b.getPositions();
+	vector<Position*> aPos = a->getPositions();
+	vector<Position*> bPos = b->getPositions();
 
-	Position aCenter = a.getCenter();
-	Position bCenter = b.getCenter();
+	Position aCenter = a->getCenter();
+	Position bCenter = b->getCenter();
 
-	Position rVel = b.getVelocity() - a.getVelocity();
+	Position rVel = b->getVelocity() - a->getVelocity();
 
 	float j = rVel.x;
 	float k = rVel.y;
 
-	if ((b.getVelocity().x == 0) && (b.getVelocity().y == 0)) {
+	if (b->getMass() > 0) {
 		Position impulse;
 		impulse.x = normal.x * j;
 		impulse.y = normal.y  * k;
@@ -42,19 +42,14 @@ void AABBVsAABB(Body& a, Body& b) {
 		negimpulse.x = normal.x * -j;
 		negimpulse.y = normal.y  * -k;
 
-		a.setVelocityWithBounce(negimpulse);
+		a->setVelocityWithBounce(negimpulse);
 	}
 	else {
-		/*rVel.x = abs(b.getVelocity().x) - abs(a.getVelocity().x);
-		rVel.y = abs(b.getVelocity().y )- abs(a.getVelocity().y);*/
 
-		Position tempVela = a.getVelocity();
-		Position tempVelb = b.getVelocity();
+		Position tempVela = a->getVelocity();
+		Position tempVelb = b->getVelocity();
 
-		Position rVel = b.getVelocity() - a.getVelocity();
-
-		/*float j = (0.5) * (pow(rVel.x, 2));
-		float k = (0.5) * (pow(rVel.y, 2));*/
+		Position rVel = b->getVelocity() - a->getVelocity();
 
 		j = rVel.x;
 		k = rVel.y;
@@ -67,90 +62,74 @@ void AABBVsAABB(Body& a, Body& b) {
 		negimpulse.x = normal.x * -j;
 		negimpulse.y = normal.y  * k;
 
-		a.setVelocityWithBounce(tempVelb);
-		b.setVelocityWithBounce(tempVela);
+		a->setVelocityWithBounce(tempVelb);
+		b->setVelocityWithBounce(tempVela);
 	}
 	
 	
 
 }
 
-void CircleVsCircle(Body& a, Body& b) { // check resolveCollision 
-	vector<Position*> aPos = a.getPositions();
-	vector<Position*> bPos = b.getPositions();
+void CircleVsCircle(Body* a, Body* b) { // check resolveCollision
+	Position tempVela = a->getVelocity();
+	Position tempVelb = b->getVelocity();
 
-	Position aCenter = a.getCenter();
-	Position bCenter = b.getCenter();
-
-	Position rVel = b.getVelocity() - a.getVelocity();
+	Position rVel = b->getVelocity() - b->getVelocity() - a->getVelocity();
 
 	float j = rVel.x;
 	float k = rVel.y;
 
-	// --- WIP
-
-	Position tempVela = a.getVelocity();
-	Position tempVelb = b.getVelocity();
-
-	//Position rVel = b.getVelocity() - a.getVelocity();
-
-	/*float j = (0.5) * (pow(rVel.x, 2));
-	float k = (0.5) * (pow(rVel.y, 2));*/
-
-	j = normal.x;
-	k = normal.y; 
-
 	Position impulse;
-	impulse.x = normal.x * j;
-	impulse.y = normal.y  * -k;
+	impulse.x = k;
+	impulse.y = -j;
 
 	Position negimpulse;
-	negimpulse.x = normal.x * -j;
-	negimpulse.y = normal.y  * k;
+	negimpulse.x = -k;
+	negimpulse.y = j;
 
-	a.setVelocityWithBounce(tempVelb);
-	b.setVelocityWithBounce(tempVela);
+	a->setVelocityWithBounce(negimpulse);
+	b->setVelocityWithBounce(impulse);
 }
 
-void AABBVsCircle(Body& c, Body& d) {
+void AABBvsCircle(Body& c, Body& d) {
 
 }
 
-void applyVelocity(Body& a, Body& b) {
+void applyVelocity(Body* a, Body* b) {
 
-	if ((a.getType() == "AABB") && (b.getType() == "AABB")) {
-		AABBVsAABB(a, b);
+	if ((a->getType() == "AABB") && (b->getType() == "AABB")) {
+		AABBvsAABB(a, b);
 	}
 
-	if ((a.getType() == "Circle") && (a.getType() == "Circle")) {
+	if ((a->getType() == "Circle") && (a->getType() == "Circle")) {
 		CircleVsCircle(a, b);
 	}
 
-	if (((a.getType() == "Circle") && (a.getType() == "AABB")) || ((a.getType() == "AABB") && (b.getType() == "Circle"))) {
-		if (a.getType() == "Circle") {
-			AABBVsCircle(b, a);
-		}
-		if (a.getType() == "AABB") {
-			AABBVsCircle(a,b);
-		}
-	}
-	//if ((a.getType() == "Circle") && (a.getType() == "Triangle")) {}
-	//if ((a.getType() == "AABB") && (a.getType() == "Triangle")) {}
-	//if ((a.getType() == "Triangle") && (a.getType() == "Triangle")) {}
+	//if (((a->getType() == "Circle") && (a->getType() == "AABB")) || ((a->getType() == "AABB") && (b->getType() == "Circle"))) {
+	//	if (a->getType() == "Circle") {
+	//		AABBvsCircle(b, a);
+	//	}
+	//	if (a->getType() == "AABB") {
+	//		AABBvsCircle(a,b);
+	//	}
+	//}
+	//if ((a->getType() == "Circle") && (a->getType() == "Triangle")) {}
+	//if ((a->getType() == "AABB") && (a->getType() == "Triangle")) {}
+	//if ((a->getType() == "Triangle") && (a->getType() == "Triangle")) {}
 }
 
 
 
 // ------------
-bool collisionDetection(Body& a, Body& b) {
+bool collisionDetection(Body* a, Body* b) {
 
 	normal.x = 0;
 	normal.y = 0;
 
-	vector<Position*> aPos = a.getPositions();
-	vector<Position*> bPos = b.getPositions();
+	vector<Position*> aPos = a->getPositions();
+	vector<Position*> bPos = b->getPositions();
 
-	if (a.getType() == "AABB" && b.getType() == "AABB") { // __________________________AABB_AABB
+	if (a->getType() == "AABB" && b->getType() == "AABB") { // __________________________AABB_AABB
 
 		Position  aPosMin;
 		Position  aPosMax;
@@ -169,118 +148,50 @@ bool collisionDetection(Body& a, Body& b) {
 			return false;
 
 		// --- set the normal of the collision
-		//Position normalA = normalizeVector(a.getVelocity());
-		//Position normalB = normalizeVector(b.getVelocity());
-		Position n = b.getCenter() - a.getCenter();
-		float absX = abs(b.getCenter().x ) - abs(a.getCenter().x);
-		float absY = abs(b.getCenter().y ) - abs(a.getCenter().y);
+		Position n = b->getCenter() - a->getCenter();
+		float absX = abs(b->getCenter().x) - abs(a->getCenter().x);
+		float absY = abs(b->getCenter().y) - abs(a->getCenter().y);
 
 		/*float absX = abs(n.x);
 		float absY = abs(n.y);*/
 
-		if ((n.x < 0) && (n.y < 0) && (absX) < (absY)) {
-			//cout << "case 1"<< endl;  
-			normal.x = 1; 
-			normal.y = -1; 		
-			applyVelocity(a, b);
-			return true;
+		if ((n.x < 0) && (n.y < 0)) {
+			if ((absX) < (absY)) {  //case 1
+				normal.x = 1; normal.y = -1;
+			}
+			else {					// case 2
+				normal.x = -1; normal.y = 1;
+			}
 		}
-		if ((n.x < 0) && (n.y < 0) && (absX) > (absY)) {
-			//cout << "case 2"<< endl;  
-			normal.x = -1;
-			normal.y = 1; 		
-			applyVelocity(a, b);
-			return true;
+		if ((n.x < 0) && (n.y > 0)) {
+			if ((absX) > (absY)) {  //case 3
+				normal.x = -1; normal.y = 1;
+			}
+			else {					//case 4
+				normal.x = 1; normal.y = -1;
+			}
 		}
-		if ((n.x < 0) && (n.y > 0) && (absX) > (absY)) {
-			//cout << "case 3"<< endl; 
-			normal.x = -1; normal.y = 1; 		
-			applyVelocity(a, b);
-			return true;
+		if ((n.x > 0) && (n.y > 0)) {
+			if ((absX) < (absY)) {  //case 5
+				normal.x = 1; normal.y = -1;
+			}
+			else {					//case 6
+				normal.x = -1; normal.y = 1;
+			}
 		}
-		if ((n.x < 0) && (n.y > 0) && (absX) < (absY)) {
-			//cout << "case 4"<< endl;  
-			normal.x = 1; 
-			normal.y = -1; 		
-			applyVelocity(a, b);
-			return true;
+		if ((n.x > 0) && (n.y < 0)) {
+			if ((absX) > (absY)) {  //case 7
+				normal.x = -1; normal.y = 1;
+			}
+			else {					//case 8
+				normal.x = 1; normal.y = -1;
+			}
 		}
-		if ((n.x > 0) && (n.y > 0) && (absX) < (absY)) {
-			//cout << "case 5"<< endl;  
-			normal.x = 1; 
-			normal.y = -1; 		
-			applyVelocity(a, b);
-			return true;
-		}
-		if ((n.x > 0) && (n.y > 0) && (absX) > (absY)) {
-			//cout << "case 6"<< endl;  
-			normal.x = -1; 
-			normal.y = 1; 		
-			applyVelocity(a, b);
-			return true;
-		}
-		if ((n.x > 0) && (n.y < 0) && (absX) > (absY)) {
-			//cout << "case 7"<< endl;  
-			normal.x = -1; 
-			normal.y = 1; 		
-			applyVelocity(a, b);
-			return true;
-		}
-		if ((n.x > 0) && (n.y < 0) && (absX) < (absY)) {
-			//cout << "case 8"<< endl;  
-			normal.x = 1; 
-			normal.y = -1; 		
-			applyVelocity(a, b);
-			return true;
-		}
-		// check if n.x > 0														
-		// check if n.y > 0
-		// check if n.x > n.y
-		// returns 8 cases;
-
-
-		//// --- find half of width for both shapes.
-		//float aExtent = (aPosMax.x - aPosMin.x) / 2;
-		//float bExtent = (bPosMax.x - bPosMin.x) / 2;
-
-		//// --- calculate overlap
-		//float xOverlap = (aExtent + bExtent) - abs(n.x);
-		//
-		//if (xOverlap > 0) {
-		//	// --- check for y overlap
-		//	float aExtent = (aPosMax.y - aPosMin.y) / 2;
-		//	float bExtent = (bPosMax.y - bPosMin.y) / 2;
-		//	float yOverlap = (aExtent + bExtent) - abs(n.y);
-
-		//	if (yOverlap > 0) {		// check if object is colliding with top or bottom of AABB
-		//		if (xOverlap > yOverlap) { // if xOverlap is greater, object is colliding Horizontally
-		//			if (n.x < 0) { cout << "case 1" << endl; normal.x = 1; normal.y = -1; } // underside positive x
-		//			else { cout << "case 2" << endl; normal.x = 1; normal.y = -1; } // underside negative x
-		//			/*applyVelocity(a, b);
-		//			return true;*/
-		//		}
-		//		else {
-		//			if (n.y < 0) { cout << "case 3" << endl; normal.x = -1; normal.y = 1; }
-		//			else { cout << "case 4" << endl; normal.x = -1; normal.y = 1; }
-		//			/*applyVelocity(a, b);
-		//			return true;*/
-		//		}
-		//	}
-		//	else {
-		//		if (n.y < 0) { cout << "case 5" << endl; normal.x = 1; normal.y = -1; }
-		//		else { cout << "case 6" << endl; normal.x = 1; normal.y = -1; }
-		//		/*applyVelocity(a, b);
-		//		return true;*/
-		//	}
-		//}
-		//else {
-		//	if (n.x < 0) { // if xOverlap is greater, object is colliding Horizontally
-		//		if (n.x < 0) { cout << "case 7" << endl; normal.x = 1; normal.y = -1; } // 
-		//		else { cout << "case 8" << endl; normal.x = 1; normal.y = -1; } //
-		//	}
-		//}
+		applyVelocity(a, b);
+		return true;
 	}
-	if (a.getType() == "Circle" && b.getType() == "Circle") { // ________________________Circle_Circle
+
+	if (a->getType() == "Circle" && b->getType() == "Circle") { // ________________________Circle_Circle
 
 		Position  aCenter;
 		Position  bCenter;
@@ -288,7 +199,8 @@ bool collisionDetection(Body& a, Body& b) {
 		aCenter = *aPos.at(0);
 		bCenter = *bPos.at(0);
 
-		float r = a.getRadius() + b.getRadius();
+		float r = a->getRadius() + b->getRadius();
+
 		float distance = (pow(bCenter.x - aCenter.x, 2)) + (pow(bCenter.y - aCenter.y, 2));
 		if ((pow(r,2)) < distance ) {
 			return false;
@@ -305,7 +217,7 @@ bool collisionDetection(Body& a, Body& b) {
 		applyVelocity(a, b);
 		return true;
 	}
-	if (a.getType() == "AABB" && b.getType() == "Circle") { // __________________________AABB_Cricle
+	if (a->getType() == "AABB" && b->getType() == "Circle") { // __________________________AABB_Cricle
 		float sqDist = 0.0f;
 		float minX, minY, maxX, maxY;
 
@@ -313,7 +225,7 @@ bool collisionDetection(Body& a, Body& b) {
 		Position  aPosMin = *aPos.at(0);
 		Position  aPosMax = *aPos.at(1);
 
-		Position AABBCenter = a.getCenter();
+		Position AABBCenter = a->getCenter();
 
 		Position circleCenter = *bPos.at(0);
 
@@ -327,7 +239,7 @@ bool collisionDetection(Body& a, Body& b) {
 		maxY = AABBCenter.y + (hieght / 2);
 
 		if (circleCenter.x < minX) 
-			sqDist += (minX - circleCenter.x) * (minX - circleCenter.x);
+			sqDist += (minX - circleCenter.x) * (minX - circleCenter.x); //add get normals from aabb v aabb
 		if (circleCenter.x > maxX)
 			sqDist += (circleCenter.x - maxX) * (circleCenter.x - maxX);
 
@@ -336,10 +248,11 @@ bool collisionDetection(Body& a, Body& b) {
 		if (circleCenter.y > maxY)
 			sqDist += (circleCenter.y - maxY) * (circleCenter.y - maxY);
 
-		if (pow(b.getRadius(), 2) < sqDist)
+		if (pow(b->getRadius(), 2) < sqDist)
 			return false;
 
 		return true;
 	}
 	return false;
 }
+
