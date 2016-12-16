@@ -1,7 +1,10 @@
 ﻿  Source.cpp
-c:\users\mchlk\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\source.cpp(47): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\mchlk\desktop\gitfolder\2dphysicsengine\physics2d_engine\physics2d_engine\source.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
-  Generating Code...
-  Skipping... (no relevant changes detected)
+c:\users\mchlk\documents\desktop\physics2d_engine\physics2d_engine\source.cpp(47): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\mchlk\documents\desktop\physics2d_engine\physics2d_engine\source.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
+  Shader.cpp
+c:\users\mchlk\documents\desktop\physics2d_engine\physics2d_engine\shader.cpp(48): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
+  Mesh.cpp
+  Display.cpp
   Body.cpp
-  Physics2D_Engine.vcxproj -> C:\Users\mchlk\Desktop\GitFolder\2DPhysicsEngine\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe
+  Generating Code...
+  Physics2D_Engine.vcxproj -> C:\Users\mchlk\Documents\Desktop\Physics2D_Engine\x64\Debug\Physics2D_Engine.exe
