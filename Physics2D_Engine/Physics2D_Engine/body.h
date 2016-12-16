@@ -34,11 +34,11 @@ public:
 		return *this;
 	}
 
-	//Position& operator* (const float& s) { // s for scalar
-	//	this->x = s * this->x;
-	//	this->y = s * this->y;
-	//	return *this;
-	//}
+	Position& operator* (const float& s) { // s for scalar
+		this->x = s * this->x;
+		this->y = s * this->y;
+		return *this;
+	}
 
 	float x;
 	float y;

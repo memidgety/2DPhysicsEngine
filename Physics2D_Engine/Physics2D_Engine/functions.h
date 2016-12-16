@@ -7,7 +7,7 @@ using namespace std;
 vector<Body> Objects;
 Position normal;
 
-float DotProduct(Position& a, Position& b ) {
+float DotProduct(Position a, Position b ) {
 	return ((a.x * b.x) + (a.y * b.y));
 }
 
@@ -20,7 +20,7 @@ Position normalizeVector(Position& a) {
 
 void AABBVsAABB(Body& a, Body& b) {
 
-	cout << "Boop" << endl;
+	//cout << "Boop" << endl;
 
 	vector<Position*> aPos = a.getPositions();
 	vector<Position*> bPos = b.getPositions();
@@ -59,57 +59,34 @@ void AABBVsAABB(Body& a, Body& b) {
 		j = rVel.x;
 		k = rVel.y;
 
-		Position impulse;
+		/*Position impulse;
 		impulse.x = normal.x * j;
 		impulse.y = normal.y  * -k;
 
 		Position negimpulse;
 		negimpulse.x = normal.x * -j;
-		negimpulse.y = normal.y  * k;
-
+		negimpulse.y = normal.y  * k;*/
+		
 		a.setVelocityWithBounce(tempVelb);
 		b.setVelocityWithBounce(tempVela);
 	}
-	
-	
-
 }
 
 void CircleVsCircle(Body& a, Body& b) { // check resolveCollision 
+
 	vector<Position*> aPos = a.getPositions();
 	vector<Position*> bPos = b.getPositions();
 
 	Position aCenter = a.getCenter();
 	Position bCenter = b.getCenter();
 
-	Position rVel = b.getVelocity() - a.getVelocity();
+	Position rVel = b.getVelocity() -b.getVelocity() - a.getVelocity();
 
-	float j = rVel.x;
-	float k = rVel.y;
+	Position tempVela(rVel.y, -rVel.x);
+	Position tempVelb(-rVel.x, rVel.y);
 
-	// --- WIP
-
-	Position tempVela = a.getVelocity();
-	Position tempVelb = b.getVelocity();
-
-	//Position rVel = b.getVelocity() - a.getVelocity();
-
-	/*float j = (0.5) * (pow(rVel.x, 2));
-	float k = (0.5) * (pow(rVel.y, 2));*/
-
-	j = normal.x;
-	k = normal.y; 
-
-	Position impulse;
-	impulse.x = normal.x * j;
-	impulse.y = normal.y  * -k;
-
-	Position negimpulse;
-	negimpulse.x = normal.x * -j;
-	negimpulse.y = normal.y  * k;
-
-	a.setVelocityWithBounce(tempVelb);
-	b.setVelocityWithBounce(tempVela);
+	a.setVelocityWithBounce(tempVela);
+	b.setVelocityWithBounce(tempVelb);
 }
 
 void AABBVsCircle(Body& c, Body& d) {

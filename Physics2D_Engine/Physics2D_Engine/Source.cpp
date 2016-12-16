@@ -41,8 +41,8 @@ Position initialForce2(0, 0);
 Position initialForce3(5, 1);
 Position initialForce4(1, -4);
 
-Position cf1(1, 0);
-Position cf2(-1, 0);
+Position cf1(1, .5);
+Position cf2(-1, -.5);
 
 
 void printPos(Body& a) {
@@ -102,7 +102,7 @@ int main(int argc, char* args[]) {
 		collisionDetection(sq2, sq3);
 
 
-		//collisionDetection(c1, c2);
+		collisionDetection(c1, c2);
 
 		display.fill(.1f, .1f, .1f, 1);
 
@@ -114,10 +114,10 @@ int main(int argc, char* args[]) {
 		ground4.draw(display);
 		//ground.Force();
 
-		//c1.Force();
-		//c1.draw(display);
-		//c2.Force();
-		//c2.draw(display);
+		c1.Force();
+		c1.draw(display);
+		c2.Force();
+		c2.draw(display);
 
 		sq3.Force();
 		sq3.draw(display);
