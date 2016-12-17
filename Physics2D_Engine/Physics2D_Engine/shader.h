@@ -1,10 +1,11 @@
+//written with the help of thebennybox at youtube.com
 #pragma once
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <GL/glew.h>
 
-class Shader{
+class Shader{ //OpenGl shader class to color objects
 public:
 	Shader(const std::string& fileName);
 

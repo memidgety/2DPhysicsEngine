@@ -7,7 +7,7 @@ using namespace std;
 vector<Body*> Objects;
 Position normal;
 
-void calculateNormals(Body* a, Body* b) {
+void calculateNormals(Body* a, Body* b) { //find the side of the AABB that an object is colliding with
 
 	// --- set the normal of the collision
 	Position n = b->getCenter() - a->getCenter();
@@ -48,28 +48,25 @@ void calculateNormals(Body* a, Body* b) {
 	}
 }
 
-float DotProduct(Position& a, Position& b ) {
+float DotProduct(Position& a, Position& b ) { //function to calculate dot product
 	return ((a.x * b.x) + (a.y * b.y));
 }
 
-Position normalizeVector(Position& a) {
+Position normalizeVector(Position& a) { //equation to normalize a vector
 	float mag = sqrt(pow(a.x, 2) + pow(a.y, 2));
 	a.x = a.x / mag;
 	a.y = a.y / mag;
 	return a;
 }
 
-void AABBvsAABB(Body* a, Body* b) {
+void AABBvsAABB(Body* a, Body* b) { //collision resolution for two AABB's
 
-	Position aCenter = a->getCenter();
-	Position bCenter = b->getCenter();
-
-	Position rVel = b->getVelocity() - a->getVelocity();
+	Position rVel = b->getVelocity() - a->getVelocity(); //get relative velocity
 
 	float j = rVel.x;
 	float k = rVel.y;
 
-	if (b->getMass() > 0) {
+	if (b->getMass() > 0) { //colliding with an immovable
 		Position impulse;
 		impulse.x = normal.x * j;
 		impulse.y = normal.y  * k;
@@ -80,7 +77,7 @@ void AABBvsAABB(Body* a, Body* b) {
 
 		a->setVelocityWithBounce(negimpulse);
 	}
-	else {
+	else { // collision with two movable objects
 
 		Position tempVela = a->getVelocity();
 		Position tempVelb = b->getVelocity();
@@ -103,14 +100,11 @@ void AABBvsAABB(Body* a, Body* b) {
 	}
 }
 
-void CircleVsCircle(Body* a, Body* b) { // check resolveCollision
+void CircleVsCircle(Body* a, Body* b) { //collision resolution for two Circle's
 	Position tempVela = a->getVelocity();
 	Position tempVelb = b->getVelocity();
 
-	Position rVel = b->getVelocity() - b->getVelocity() - a->getVelocity();
-	//Position rVel;
-	//rVel.x = abs(b->getVelocity().x) - abs(a->getVelocity().x);
-	//rVel.y = abs(b->getVelocity().y) - abs(a->getVelocity().y);
+	Position rVel = b->getVelocity() - b->getVelocity() - a->getVelocity(); //get the opposite direction of the first object
 
 	float j = rVel.x;
 	float k = rVel.y;
@@ -118,10 +112,10 @@ void CircleVsCircle(Body* a, Body* b) { // check resolveCollision
 	normalizeVector(normal);
 
 	Position impulse;
-	impulse.x = normal.y * (sqrt((pow(j,2)+(pow(k,2))))); 
+	impulse.x = normal.y * (sqrt((pow(j,2)+(pow(k,2)))));	// Multiply the normal vector by the magnitude of the Relative Velocity
 	impulse.y = normal.x *  -(sqrt((pow(j, 2) + (pow(k, 2)))));
 
-	Position negimpulse;
+	Position negimpulse;									// Same as impulse, but signs flipped for other circle
 	negimpulse.x = normal.y * -(sqrt((pow(j, 2) + (pow(k, 2)))));
 	negimpulse.y = normal.x * (sqrt((pow(j, 2) + (pow(k, 2)))));
 
@@ -129,14 +123,14 @@ void CircleVsCircle(Body* a, Body* b) { // check resolveCollision
 	b->setVelocityWithBounce(impulse);
 }
 
-void AABBvsCircle(Body* a, Body* b) {
+void AABBvsCircle(Body* a, Body* b) { //collision resolution for an AABB vs Circle. Note Body* a must be an AABB
 
 	Position rVel = b->getVelocity() - a->getVelocity();
 
 	float j = rVel.x;
 	float k = rVel.y;
 
-	if (a->getMass() > 0) {
+	if (a->getMass() > 0) {	 //colliding with an immovable object
 		Position impulse;
 		impulse.x = normal.x * j;
 		impulse.y = normal.y  * k;
@@ -148,7 +142,7 @@ void AABBvsCircle(Body* a, Body* b) {
 		b->setVelocityWithBounce(negimpulse);
 	}
 
-	else {
+	else {					//Colliding with another moving object
 
 		Position tempVela = a->getVelocity();
 		Position tempVelb = b->getVelocity();
@@ -171,7 +165,7 @@ void AABBvsCircle(Body* a, Body* b) {
 	}
 }
 
-void applyVelocity(Body* a, Body* b) {
+void applyVelocity(Body* a, Body* b) { //find what what type of object is colliding then resolve collision
 
 	if ((a->getType() == "AABB") && (b->getType() == "AABB")) {
 		AABBvsAABB(a, b);
@@ -181,7 +175,7 @@ void applyVelocity(Body* a, Body* b) {
 		CircleVsCircle(a, b);
 	}
 
-	if (((a->getType() == "Circle") && (a->getType() == "AABB")) || ((a->getType() == "AABB") && (b->getType() == "Circle"))) {
+	if (((a->getType() == "Circle") && (a->getType() == "AABB")) || ((a->getType() == "AABB") && (b->getType() == "Circle"))) { //sets body types correctly into function for resolving collision
 		if (a->getType() == "Circle") {
 			AABBvsCircle(b, a);
 		}
@@ -194,10 +188,8 @@ void applyVelocity(Body* a, Body* b) {
 	//if ((a->getType() == "Triangle") && (a->getType() == "Triangle")) {}
 }
 
-
-
 // ------------
-bool collisionDetection(Body* a, Body* b) {
+bool collisionDetection(Body* a, Body* b) { // detect collision of different types of body's
 
 	normal.x = 0;
 	normal.y = 0;
@@ -212,7 +204,7 @@ bool collisionDetection(Body* a, Body* b) {
 		Position  bPosMin;
 		Position  bPosMax;
 
-		aPosMin = *aPos.at(0);
+		aPosMin = *aPos.at(0); //set the max and min of each AABB
 		aPosMax = *aPos.at(1);
 		bPosMin = *bPos.at(0);
 		bPosMax = *bPos.at(1);
@@ -237,14 +229,14 @@ bool collisionDetection(Body* a, Body* b) {
 		aCenter = *aPos.at(0);
 		bCenter = *bPos.at(0);
 
-		float r = a->getRadius() + b->getRadius();
+		float r = a->getRadius() + b->getRadius(); //get the distance of combined radii
+		float distance = (pow(bCenter.x - aCenter.x, 2)) + (pow(bCenter.y - aCenter.y, 2));// checks distance between centers
 
-		float distance = (pow(bCenter.x - aCenter.x, 2)) + (pow(bCenter.y - aCenter.y, 2));
 		if ((pow(r,2)) < distance ) {
 			return false;
 		}
-		//cout << "colliding C" << endl; Norman Pham and Michael Kilmer's Code.
-		Position n;// (bCenter - aCenter); // vector from b to a; use dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
+
+		Position n;// vector from b to a; use dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
 		
 		n.x = bCenter.x - aCenter.x;
 		n.y = bCenter.y - aCenter.y;
@@ -276,8 +268,8 @@ bool collisionDetection(Body* a, Body* b) {
 		minY = AABBCenter.y - (hieght / 2);
 		maxY = AABBCenter.y + (hieght / 2);
 
-		if (circleCenter.x < minX) {
-			sqDist += (minX - circleCenter.x) * (minX - circleCenter.x); //add get normals from aabb v aabb
+		if (circleCenter.x < minX) { //check for the relative quadrent of which the circle is on
+			sqDist += (minX - circleCenter.x) * (minX - circleCenter.x);
 		}
 		if (circleCenter.x > maxX) {
 			sqDist += (circleCenter.x - maxX) * (circleCenter.x - maxX);

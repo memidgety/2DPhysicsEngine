@@ -1,6 +1,8 @@
+//written with the help of thebennybox at youtube.com
 #pragma once
 #include <glm\glm.hpp>
 #include <GL\glew.h>
+//Mesh class not used in final version to draw objects
 
 class Vertex {
 public:

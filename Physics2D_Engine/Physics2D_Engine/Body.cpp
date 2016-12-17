@@ -1,6 +1,6 @@
 #include "body.h"
 
-Position::Position() {
+Position::Position() { //default constructor
 	x = 0;
 	y = 0;
 };
@@ -10,7 +10,8 @@ Position::Position(float x, float y){
 	this->y = y;
 };
 
-Position& Position::operator= (const Position& p) {
+//Operator Overloads to compare, add, and subtract positions
+Position& Position::operator= (const Position& p) { 
 	this->x = p.x;
 	this->y = p.y;
 	return *this;
@@ -35,16 +36,12 @@ Body::Body(){
 
 Body::~Body() {};
 
-void Body::Force() {
-	for (std::size_t i = 0; i < positions.size(); ++i) //for loop to go through accounts
+void Body::Force() { //used to move objects around the screen
+	for (std::size_t i = 0; i < positions.size(); ++i)
 	{
-		Position * s = positions[i]; // set s to go through every account
+		Position * s = positions[i]; //create temporary position for each position an object has, add to it, set new positions
 		s->x += velocity.x;
 		s->y += velocity.y;
-
-		// --- adding gravity
-		//s->x += gravity.first;
-		//s->y += gravity.second;
 		positions[i] = s;
 	}
 };

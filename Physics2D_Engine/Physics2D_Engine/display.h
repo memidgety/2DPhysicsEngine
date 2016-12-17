@@ -1,8 +1,9 @@
+//written with the help of thebennybox at youtube.com
 #pragma once
-
 #include<SDL2/SDL.h>
 #include<string>
-class Display {
+
+class Display { //OpenGL display class used to create new windows
 public:
 	Display(int width, int hieght, const std::string& title);
 

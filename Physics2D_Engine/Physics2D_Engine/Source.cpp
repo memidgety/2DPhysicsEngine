@@ -1,3 +1,4 @@
+//2D Collision Engine written by Michael Kilmer and Norman Pham
 #include <iostream>
 #include <thread>
 #include <GL/glew.h>

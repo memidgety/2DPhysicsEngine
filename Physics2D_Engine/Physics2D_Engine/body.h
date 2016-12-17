@@ -2,11 +2,10 @@
 #include <vector>
 #include "mesh.h"
 #include "display.h"
-
 using namespace std;
 
 
-class Position {
+class Position { //class to keep track of points along the x and y coordiantes of the gird
 public:
 	Position();
 
@@ -18,19 +17,13 @@ public:
 
 	Position& operator- (const Position& p);
 
-	//Position& operator* (const float& s) { // s for scalar
-	//	this->x = s * this->x;
-	//	this->y = s * this->y;
-	//	return *this;
-	//}
-
 	float x;
 	float y;
 private:
 
 };
 
-class Body{
+class Body{ //Body parent class used to store different shapes within the same container
 public:
 	Body();
 	~Body();
