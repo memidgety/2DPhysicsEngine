@@ -11,7 +11,7 @@
 int screenWidth = 800;
 int screenHieght = 800;
 
-Position pos1(100, 100);
+Position pos1(-200, -200);
 Position pos2(400, 150);
 
 Position sqMax(0,0);
@@ -39,13 +39,13 @@ Position g3Min(-800, -600);
 Position g4Max(800, 600);
 Position g4Min(600, -600);
 
-Position initialForce(-6, 3);
+Position initialForce(-1.2, 0.6);
 Position initialForce2(0, 0);
-Position initialForce3(5, 1);
-Position initialForce4(1, -4);
+Position initialForce3(1, 0.2);
+Position initialForce4(0.2, -0.8);
 
 Position cf1(0.1, 0.1);
-Position cf2(-0.1, -0.1);
+Position cf2(-0.2, -0.2);
 
 
 Display display(screenWidth, screenHieght, "HelloWorld");
@@ -90,8 +90,7 @@ int main(int argc, char* args[]) {
 
 	Triangle T1(pos6, pos7, pos8);
 
-	Objects.push_back(&c1);
-	Objects.push_back(&c2);
+
 	Objects.push_back(&sq1);
 	Objects.push_back(&sq2);
 	Objects.push_back(&sq3);
@@ -99,6 +98,8 @@ int main(int argc, char* args[]) {
 	Objects.push_back(&ground2);
 	Objects.push_back(&ground3);
 	Objects.push_back(&ground4);
+	Objects.push_back(&c1);
+	Objects.push_back(&c2);
 
 	Shader shader("./res/basicShader");
 

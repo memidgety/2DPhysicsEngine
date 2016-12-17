@@ -75,8 +75,10 @@ public:
 
 	//______Getters______
 	string getType() override { return Type; }
+	Position getCenter() override { return pos1; }
 	float getRadius() override { return radius; }
 	float getMass() override { return mass; }
+
 
 private:
 	string Type = "Circle";
